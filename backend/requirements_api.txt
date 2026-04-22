@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+python-multipart
+soundfile
+librosa
+torch
+bs-roformer

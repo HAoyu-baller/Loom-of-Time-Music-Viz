@@ -1,0 +1,232 @@
+/* 岁月织机 — Loom of Time (Interactive Art overlay) */
+
+/* ── 画布 ──────────────────────────────────────────────────────── */
+.canvas-mount {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.canvas-mount canvas {
+  display: block;
+}
+
+/* ── 覆盖层 ────────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ── 中央 UI（landing screen）──────────────────────────────────── */
+.center-ui {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  pointer-events: auto;
+  text-align: center;
+  user-select: none;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-shadow: 0 0 80px rgba(255, 255, 255, 0.08);
+}
+
+.subtitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(11px, 1.2vw, 14px);
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.40);
+  margin: 0;
+  margin-top: 2px;
+  text-transform: uppercase;
+  max-width: 640px;
+}
+
+/* ── 上传按钮 ──────────────────────────────────────────────────── */
+.upload-btn {
+  margin-top: 34px;
+  padding: 14px 42px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.80);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    border-color 0.4s ease,
+    color 0.4s ease,
+    background 0.4s ease,
+    box-shadow 0.4s ease;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.upload-btn:hover {
+  border-color: rgba(255, 255, 255, 0.50);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 40px rgba(255, 255, 255, 0.06),
+    inset 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+.hint {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.25);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.demo-btn {
+  margin-top: 6px;
+  background: none;
+  border: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.30);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+.demo-btn:hover {
+  color: rgba(255, 255, 255, 0.70);
+}
+
+.error-msg {
+  color: #ff9f9f;
+  font-size: 12px;
+  margin-top: 14px;
+  letter-spacing: 0.08em;
+  max-width: 560px;
+}
+
+/* ── 左上角返回键 ───────────────────────────────────────────── */
+.back-btn {
+  position: fixed;
+  top: 22px;
+  left: 22px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: auto;
+  padding: 0;
+}
+.back-btn:hover {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.06);
+}
+
+/* ── 加载层（两阶段伪进度）──────────────────────────────────── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.loading-content {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.90);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.phase-label {
+  font-size: 15px;
+  letter-spacing: 0.32em;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.progress-track {
+  width: 380px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin: 0 auto;
+}
+.progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.88);
+  transition: width 0.1s linear;
+}
+
+/* ── 识别结果揭示（phase 2 顶部）──────────────────────────── */
+.region-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 44px;
+  animation: revealFade 0.8s ease-out;
+}
+.reveal-label {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.38);
+  text-transform: uppercase;
+}
+.reveal-name {
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.95);
+}
+.reveal-conf {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.42);
+  text-transform: uppercase;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes revealFade {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}

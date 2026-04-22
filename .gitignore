@@ -1,0 +1,70 @@
+# ── Model weights ─────────────────────────────────────────────────
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+
+# ── Audio / Video ─────────────────────────────────────────────────
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+*.ncm
+*.mp4
+*.aac
+
+# ── Raw training data & proprietary music ─────────────────────────
+VipSongsDownload/
+music/
+dataset/
+
+# ── Generated / temporary backend artefacts ───────────────────────
+backend/classifier/data/
+backend/training/checkpoints/
+backend/outputs/
+backend/uploads/
+backend/training/test_output/
+
+# ── Python ────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+.Python
+
+# ── Frontend build & deps ─────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+frontend/.env.*
+frontend/.env.local
+
+# ── Jupyter checkpoints ───────────────────────────────────────────
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# ── System / editor ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+.idea/
+.vscode/
+*.code-workspace
+
+# ── Claude Code project files ─────────────────────────────────────
+.claude/
+
+# ── Training run outputs (keep PNGs in runs/ but not weights) ─────
+backend/training/runs/*.json
