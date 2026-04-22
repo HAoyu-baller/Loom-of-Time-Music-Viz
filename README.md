@@ -144,20 +144,48 @@ hf_hub_download('ruanhaoyu/loom-of-time-models', 'classifier/loom_best.pth',
 
 All training code lives in `backend/training/` and the root-level `build_dataset.py` / `dataset.py`.
 
-### Separator (BSRoformer)
+### Data Pipeline (Separator)
 
+The separator is trained on single-instrument audio clips from public datasets. **You do not need to provide any audio manually** — the download script handles instrument stems automatically.
+
+| Dataset | HF ID | Stems |
+|---|---|---|
+| Chinese Traditional Instrument Sounds | [`ccmusic-database/CTIS`](https://huggingface.co/datasets/ccmusic-database/CTIS) | erhu, wind, plucked, perc |
+| Erhu Playing Techniques | [`ccmusic-database/erhu_playing_tech`](https://huggingface.co/datasets/ccmusic-database/erhu_playing_tech) | erhu |
+| Guzheng Tech 99 | [`ccmusic-database/Guzheng_Tech99`](https://huggingface.co/datasets/ccmusic-database/Guzheng_Tech99) | plucked |
+| M4Singer | [`M4Singer/M4Singer`](https://huggingface.co/datasets/M4Singer/M4Singer) | vocal |
+
+**Step 1 — Download and preprocess instrument stems:**
 ```bash
-# 1. Build the mixed-source dataset
-python build_dataset.py --stems_dir /path/to/stems --out_dir data/
+pip install datasets librosa soundfile tqdm
+python backend/download_hf_datasets.py          # downloads CTIS, erhu_tech, Guzheng99
+# Output: music/instruments_clean/{erhu,wind,plucked,perc}/
 
-# 2. Train
+# For vocal stem, download M4Singer separately and place under:
+# music/instruments_clean/vocal/
+```
+
+**Step 2 — Balance and chunk into training clips:**
+```bash
+python backend/training/build_dataset.py \
+    --src music/instruments_clean \
+    --dst data/dataset_balanced \
+    --per-stem 4500 \
+    --min-rms 0.01 \
+    --workers 8
+```
+
+**Step 3 — Train:**
+```bash
 cd backend/training
-python -c "import train; train.main()"   # or open train.ipynb
+# open train.ipynb, or:
+python -c "import train; train.main()"
 
-# Key hyperparameters (dataset.py / train.ipynb):
+# Key hyperparameters (dataset.py):
 #   batch_size=8, lr=3e-4, epochs=100
 #   Silence Dropout: vocal 50%, perc 40%
 #   Multi-Resolution STFT Loss: fft_sizes=[512, 2048, 8192]
+#   Chunk size: 132300 samples (6 s @ 22050 Hz)
 ```
 
 ### Classifier (ResNet18)
