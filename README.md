@@ -165,7 +165,27 @@ python backend/download_hf_datasets.py          # downloads CTIS, erhu_tech, Guz
 # music/instruments_clean/vocal/
 ```
 
-**Step 2 — Balance and chunk into training clips:**
+**Step 2 — Quality filtering and dataset balancing:**
+
+Raw clips are filtered and balanced by `build_dataset.py` through a two-pass pipeline:
+
+1. **Silence rejection** — each clip is read and its RMS energy is computed; clips with RMS < 0.01 are discarded (near-silence, failed recordings, very quiet passages)
+2. **Energy ranking** — surviving clips are sorted by RMS descending; the top-N energy-richest clips are kept per stem, ensuring the model trains on musically active material
+3. **Cross-stem balancing** — all stems are capped at the same clip count (4,500, limited by the perc stem which is the smallest pool), eliminating per-stem bias
+
+After filtering, the final training set is:
+
+| Stem | Clips kept | Duration |
+|---|---|---|
+| erhu | 4,500 | ~3.75 h |
+| wind | 4,500 | ~3.75 h |
+| plucked | 4,500 | ~3.75 h |
+| perc | 4,500 | ~3.75 h |
+| vocal | 4,500 | ~3.75 h |
+| **Total** | **22,500** | **~18.75 h** |
+
+Each clip is 3 seconds at 22,050 Hz mono. At runtime, `DynamicMixDataset` randomly draws one clip per stem per batch item and mixes them on-the-fly with ±3 dB gain jitter — this means the effective training diversity is orders of magnitude larger than the raw clip count.
+
 ```bash
 python backend/training/build_dataset.py \
     --src music/instruments_clean \
