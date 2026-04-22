@@ -13,6 +13,8 @@
 
 *Upload any Chinese folk song. Watch it unravel into five instrument threads and weave itself into a living tapestry.*
 
+**GitHub:** [HAoyu-baller/Loom-of-Time-Music-Viz](https://github.com/HAoyu-baller/Loom-of-Time-Music-Viz)
+
 </div>
 
 ---
@@ -293,7 +295,7 @@ If you use this work, please cite:
   year      = {2026},
   publisher = {ACM},
   address   = {Dublin, Ireland},
-  note      = {\url{https://github.com/ruanhaoyu/loom-of-time}}
+  note      = {\url{https://github.com/HAoyu-baller/Loom-of-Time-Music-Viz}}
 }
 ```
 
