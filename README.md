@@ -113,7 +113,10 @@ Then open `http://localhost:5173` and upload a Chinese folk music file (MP3 / WA
 
 Model checkpoints are too large for GitHub and are hosted on Hugging Face:
 
-**🤗 [ruanhaoyu/loom-of-time-models](https://huggingface.co/ruanhaoyu/loom-of-time-models)**  *(link active at submission time)*
+| Resource | Link |
+|---|---|
+| Model weights (BSRoformer + ResNet18) | 🤗 [Haoyu123123/loom-of-time-models](https://huggingface.co/Haoyu123123/loom-of-time-models) |
+| Spectrogram training data | 🤗 [Haoyu123123/loom-of-time-data](https://huggingface.co/datasets/Haoyu123123/loom-of-time-data) |
 
 Download and place files as follows:
 
@@ -131,9 +134,9 @@ Or use the Hugging Face CLI:
 pip install huggingface_hub
 python -c "
 from huggingface_hub import hf_hub_download
-hf_hub_download('ruanhaoyu/loom-of-time-models', 'separator/best.pt',
+hf_hub_download('Haoyu123123/loom-of-time-models', 'models/separator/best.pt',
                 local_dir='backend/training/checkpoints')
-hf_hub_download('ruanhaoyu/loom-of-time-models', 'classifier/loom_best.pth',
+hf_hub_download('Haoyu123123/loom-of-time-models', 'models/classifier/loom_best.pth',
                 local_dir='backend/classifier/models')
 "
 ```
